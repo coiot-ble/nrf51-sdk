@@ -1,17 +1,17 @@
 [binaries]
-c = '/usr/bin/arm-none-eabi-gcc'
-cpp = '/usr/bin/arm-none-eabi-g++'
-ar = '/usr/bin/arm-none-eabi-ar'
-as = '/usr/bin/arm-none-eabi-as'
-strip = '/usr/bin/arm-none-eabi-strip'
-ld = '/usr/bin/arm-none-eabi-ld'
+c = 'arm-none-eabi-gcc'
+cpp = 'arm-none-eabi-g++'
+ar = 'arm-none-eabi-ar'
+as = 'arm-none-eabi-as'
+strip = 'arm-none-eabi-strip'
+ld = 'arm-none-eabi-ld'
 exe_wrapper = '/home/leo/bin/nrf51_exe_wrapper'
 
 [properties]
 gcc_prefix = 'arm-none-eabi-'
-c_args = [ '-DNRF51', '-DNRF51422', '-DBOARD_PCA10028', '-mthumb' '-mabi=aapcs', '-mfloat-abi=soft',
+c_args = [ '-DNRF51', '-DNRF51422', '-DBOARD_PCA10028', '-mcpu=cortex-m0', '-mthumb', '-mabi=aapcs', '-mfloat-abi=soft',
 	'-ffunction-sections', '-fdata-sections', '-fno-strict-aliasing', '-fno-builtin',
-	'--short-enums']
+	'--short-enums', '-I.']
 c_link_args = ['-mthumb', '-mabi=aapcs', '-Wl,--gc-sections', '--specs=nano.specs',
 	'-lc', '-lnosys']
 
