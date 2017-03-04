@@ -107,73 +107,73 @@ bsp_inc = include_directories(
     dir_components + '/',
     dir_lib + '/scheduler',
     dir_ble_sv + '/ble_lbs',
-dir_ble_sv + '/ble_hts',
-	dir_nrf + '/delay',
-	dir_lib + '/crc16',
-	dir_nrf + '/timer',
-	dir_lib + '/util',
-	dir_nrf + '/pwm',
-	dir_lib + '/usbd/class/cdc',
-	dir_lib + '/csense',
-	dir_nrf + '/rng',
-	dir_lib + '/low_power_pwm',
-	dir_lib + '/hardfault',
-	dir_ble_sv + '/ble_cscs',
-	dir_lib + '/uart',
-	dir_lib + '/hci',
-	dir_lib + '/usbd/class/hid/kbd',
-	dir_nrf + '/spi_slave',
-	dir_nrf + '/lpcomp',
-	dir_lib + '/timer',
-	dir_nrf + '/power',
-	dir_lib + '/usbd/config',
-	dir_toolchain + '',
-	dir_lib + '/led_softblink',
-	dir_nrf + '/qdec',
-	dir_ble_sv + '/ble_cts_c',
-	dir_nrf + '/spi_master',
-	dir_ble_sv + '/ble_nus',
-	dir_ble_sv + '/ble_hids',
-	dir_nrf + '/pdm',
-	dir_lib + '/crc32',
-	dir_lib + '/usbd/class/audio',
-	dir_ble + '/peer_manager',
-	dir_nrf + '/swi',
-	dir_ble_sv + '/ble_tps',
-	dir_ble_sv + '/ble_dis',
-	dir_components + '/device',
-	dir_ble + '/nrf_ble_qwr',
-	dir_lib + '/button',
-	dir_lib + '/usbd',
-	dir_nrf + '/saadc',
-	dir_ble_sv + '/ble_lbs_c',
-	dir_ble + '/ble_racp',
-	dir_lib + '/fds',
-	dir_lib + '/twi',
-	dir_nrf + '/clock',
-	dir_ble_sv + '/ble_rscs',
-	dir_nrf + '/usbd',
-	dir_softdevice + '/common/softdevice_handler',
-	dir_ble_sv + '/ble_hrs',
-	dir_lib + '/log/src'
+    dir_ble_sv + '/ble_hts',
+    dir_nrf + '/delay',
+    dir_lib + '/crc16',
+    dir_nrf + '/timer',
+    dir_lib + '/util',
+    dir_nrf + '/pwm',
+    dir_lib + '/usbd/class/cdc',
+    dir_lib + '/csense',
+    dir_nrf + '/rng',
+    dir_lib + '/low_power_pwm',
+    dir_lib + '/hardfault',
+    dir_ble_sv + '/ble_cscs',
+    dir_lib + '/uart',
+    dir_lib + '/hci',
+    dir_lib + '/usbd/class/hid/kbd',
+    dir_nrf + '/spi_slave',
+    dir_nrf + '/lpcomp',
+    dir_lib + '/timer',
+    dir_nrf + '/power',
+    dir_lib + '/usbd/config',
+    dir_toolchain + '',
+    dir_lib + '/led_softblink',
+    dir_nrf + '/qdec',
+    dir_ble_sv + '/ble_cts_c',
+    dir_nrf + '/spi_master',
+    dir_ble_sv + '/ble_nus',
+    dir_ble_sv + '/ble_hids',
+    dir_nrf + '/pdm',
+    dir_lib + '/crc32',
+    dir_lib + '/usbd/class/audio',
+    dir_ble + '/peer_manager',
+    dir_nrf + '/swi',
+    dir_ble_sv + '/ble_tps',
+    dir_ble_sv + '/ble_dis',
+    dir_components + '/device',
+    dir_ble + '/nrf_ble_qwr',
+    dir_lib + '/button',
+    dir_lib + '/usbd',
+    dir_nrf + '/saadc',
+    dir_ble_sv + '/ble_lbs_c',
+    dir_ble + '/ble_racp',
+    dir_lib + '/fds',
+    dir_lib + '/twi',
+    dir_nrf + '/clock',
+    dir_ble_sv + '/ble_rscs',
+    dir_nrf + '/usbd',
+    dir_softdevice + '/common/softdevice_handler',
+    dir_ble_sv + '/ble_hrs',
+    dir_lib + '/log/src'
 )
 
 segger_rtt = files(
     dir + '/external/segger_rtt/RTT_Syscalls_GCC.c',
     dir + '/external/segger_rtt/SEGGER_RTT.c',
     dir + '/external/segger_rtt/SEGGER_RTT_printf.c'
-    )
+)
 segger_rtt_inc = include_directories(
     dir + '/external/segger_rtt'
-    )
+)
 
 nrf51_gcc = files(
     dir_toolchain + '/gcc/gcc_startup_nrf51.S',
     dir_toolchain + '/system_nrf51.c'
-    )
+)
 nrf51_gcc_inc = include_directories(
     dir_toolchain + '/gcc'
-    )
+)
 
 i = [include_directories('.'), bsp_inc, segger_rtt_inc, nrf51_gcc_inc]
 
