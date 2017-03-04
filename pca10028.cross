@@ -11,7 +11,7 @@ exe_wrapper = '/home/leo/bin/nrf51_exe_wrapper'
 gcc_prefix = 'arm-none-eabi-'
 c_args = [ '-DNRF51', '-DNRF51422', '-DBOARD_PCA10028', '-mcpu=cortex-m0', '-mthumb', '-mabi=aapcs', '-mfloat-abi=soft',
 	'-ffunction-sections', '-fdata-sections', '-fno-strict-aliasing', '-fno-builtin',
-	'--short-enums', '-I.']
+	'--short-enums']
 c_link_args = ['-mthumb', '-mabi=aapcs', '-Wl,--gc-sections', '--specs=nano.specs',
 	'-lc', '-lnosys']
 
