@@ -189,3 +189,6 @@ l = static_library('sdk', bsp, segger_rtt, nrf51_gcc,
       '-DSWI_DISABLE0', '-DBLE_STACK_SUPPORT_REQD',
       '-DSOFTDEVICE_PRESENT','-DS130','-DNRF_SD_BLE_API_VERSION=2'],
     link_args: link_args)
+
+flash_softdevice=run_target('flash_softdevice',
+    command: ['nrfjprog', '--program', dir_softdevice + '/s130/hex/s130_nrf51_2.0.1_softdevice.hex', '--verify', '-f', 'nrf51', '--sectorerase']
