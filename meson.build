@@ -1,6 +1,6 @@
 project('nrf51-sdk', 'C')
 
-dir = meson.current_source_dir() + '/nrf51-sdk'
+dir = 'nrf51-sdk'
 dir_components = dir + '/components'
 dir_lib = dir_components + '/libraries'
 dir_nrf = dir_components + '/drivers_nrf'
@@ -177,7 +177,7 @@ nrf51_gcc_inc = include_directories(
 
 i = [include_directories('.'), bsp_inc, segger_rtt_inc, nrf51_gcc_inc]
 
-gcclink = dir_toolchain + '/gcc'
+gcclink = meson.current_source_dir() + '/' + dir_toolchain + '/gcc'
 link_args = ['-Wl,-L' + gcclink, '-L ' + gcclink ]
 
 l = static_library('sdk', bsp, segger_rtt, nrf51_gcc,
