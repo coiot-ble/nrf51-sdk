@@ -1,5 +1,7 @@
 project('nrf51-sdk', 'C')
 
+assert(meson.is_cross_build(), 'SDK must be cross-compiled')
+
 dir = 'nrf51-sdk'
 dir_components = dir + '/components'
 dir_lib = dir_components + '/libraries'
