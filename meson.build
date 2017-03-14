@@ -2,6 +2,17 @@ project('nrf51-sdk', 'C')
 
 assert(meson.is_cross_build(), 'SDK must be cross-compiled')
 
+cdata = configuration_data()
+sdk_confoptions = [ 'ble_advertising', 'ble_db_discovery', 'ble_dtm', 'ble_racp',
+    'nrf_ble_qwr', 'ble_ancs_c', 'ble_ans_c', 'ble_bas_c', 'ble_bas', 'ble_cscs',
+    'ble_cts_c', 'ble_dis', 'ble_gls', 'ble_hids', 'ble_hrs_c', 'ble_hrs', 'ble_hts',
+    'ble_ias_c', 'ble_ias', 'ble_lbs_c', 'ble_lbs', 'ble_lls', 'ble_nus_c', 'ble_nus',
+    'ble_rscs_c', 'ble_rscs', 'ble_tps']
+foreach opt : sdk_confoptions
+  cdata.set10(opt.to_upper() + '_ENABLED', get_option(opt))
+endforeach
+configure_file(output:'sdk_options.h', configuration: cdata)
+
 dir = 'nrf51-sdk'
 dir_components = dir + '/components'
 dir_lib = dir_components + '/libraries'
@@ -182,7 +193,13 @@ i = [include_directories('.'), bsp_inc, segger_rtt_inc, nrf51_gcc_inc]
 gcclink = meson.current_source_dir() + '/' + dir_toolchain + '/gcc'
 link_args = ['-Wl,-L' + gcclink, '-L ' + gcclink ]
 
-l = static_library('sdk', bsp, segger_rtt, nrf51_gcc,
+sensorsim = []
+if get_option('sensorsim')
+  i += include_directories(dir_lib + '/sensorsim')
+  sensorsim = files(dir_lib + '/sensorsim/sensorsim.c')
+endif
+
+l = static_library('sdk', bsp, segger_rtt, nrf51_gcc, sensorsim,
     include_directories: i,
     c_args: [
       '-Wall', '-Werror',
