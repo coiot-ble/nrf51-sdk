@@ -2,17 +2,6 @@ project('nrf51-sdk', 'C')
 
 assert(meson.is_cross_build(), 'SDK must be cross-compiled')
 
-cdata = configuration_data()
-sdk_confoptions = [ 'ble_advertising', 'ble_db_discovery', 'ble_dtm', 'ble_racp',
-    'nrf_ble_qwr', 'ble_ancs_c', 'ble_ans_c', 'ble_bas_c', 'ble_bas', 'ble_cscs',
-    'ble_cts_c', 'ble_dis', 'ble_gls', 'ble_hids', 'ble_hrs_c', 'ble_hrs', 'ble_hts',
-    'ble_ias_c', 'ble_ias', 'ble_lbs_c', 'ble_lbs', 'ble_lls', 'ble_nus_c', 'ble_nus',
-    'ble_rscs_c', 'ble_rscs', 'ble_tps']
-foreach opt : sdk_confoptions
-  cdata.set10(opt.to_upper() + '_ENABLED', get_option(opt))
-endforeach
-configure_file(output:'sdk_options.h', configuration: cdata)
-
 dir = 'nrf51-sdk'
 dir_components = dir + '/components'
 dir_lib = dir_components + '/libraries'
@@ -21,6 +10,61 @@ dir_ble = dir_components + '/ble'
 dir_ble_sv = dir_ble + '/ble_services'
 dir_softdevice = dir_components + '/softdevice'
 dir_toolchain = dir_components + '/toolchain'
+
+
+# try to add source file automatically...
+SOURCE_AUTO = true
+# ... or not (name is different from option name)
+NO_SOURCE_AUTO = false
+options = [
+    [dir_lib, SOURCE_AUTO, ['sensorsim']],
+    [dir_ble, SOURCE_AUTO, ['ble_advertising', 'ble_db_discovery', 'ble_dtm', 'ble_racp',
+      'nrf_ble_qwr']],
+    [dir_ble_sv, NO_SOURCE_AUTO, ['ble_ancs_c']],
+    [dir_ble_sv, SOURCE_AUTO, ['ble_ans_c', 'ble_bas_c', 'ble_bas', 'ble_cscs',
+      'ble_cts_c', 'ble_dis', 'ble_gls', 'ble_hids', 'ble_hrs_c', 'ble_hrs', 'ble_hts',
+      'ble_ias_c', 'ble_ias', 'ble_lbs_c', 'ble_lbs', 'ble_lls', 'ble_nus_c', 'ble_nus',
+      'ble_rscs_c', 'ble_rscs', 'ble_tps']],
+    ]
+
+cdata = configuration_data()
+foreach optgrps : options
+  foreach opt: optgrps[2]
+    cdata.set10(opt.to_upper() + '_ENABLED', get_option(opt))
+  endforeach
+endforeach
+configure_file(output:'sdk_options.h', configuration: cdata)
+
+options_s = []
+options_i = []
+foreach optgrp : options
+  optdir = optgrp[0]
+  foreach opt : optgrp[2]
+    options_i += optdir + '/' + opt
+    if optgrp[1] == SOURCE_AUTO
+      options_s += optdir + '/' + opt + '/' + opt + '.c'
+    endif
+  endforeach
+endforeach
+
+if get_option('ble_ancs_c')
+  foreach f: ['ancs_app_attr_get.c', 'ancs_attr_parser.c', 'ancs_tx_buffer.c', 'nrf_ble_ancs_c.c']
+    options_s += dir_ble_sv + '/ble_ancs_c/' + f
+  endforeach
+endif
+
+if get_option('ble_cscs')
+  options_s += dir_ble_sv + '/ble_cscs/ble_sc_ctrlpt.c'
+endif
+
+if get_option('ble_dtm')
+  options_s += dir_ble + '/ble_dtm/ble_dtm_hw_nrf51.c'
+endif
+
+if get_option('ble_gls')
+  options_s += dir_ble + '/ble_gls/ble_gls_db.c'
+endif
+
 
 bsp = files(
     dir_lib + '/log/src/nrf_log_backend_serial.c',
@@ -49,10 +93,8 @@ bsp = files(
     dir_lib + '/bsp/bsp_btn_ble.c',
     dir_lib + '/bsp/bsp_nfc.c',
     dir_ble + '/common/ble_advdata.c',
-    dir_ble + '/ble_advertising/ble_advertising.c',
     dir_ble + '/common/ble_conn_params.c',
     dir_ble + '/common/ble_conn_state.c',
-    dir_ble + '/ble_db_discovery/ble_db_discovery.c',
     dir_ble + '/common/ble_srv_common.c',
     dir_ble + '/peer_manager/gatt_cache_manager.c',
     dir_ble + '/peer_manager/gatts_cache_manager.c',
@@ -88,13 +130,11 @@ bsp_inc = include_directories(
     dir_nrf + '/gpiote',
     dir_components + '/boards',
     dir_nrf + '/common',
-    dir_ble + '/ble_advertising',
     dir_nrf + '/adc',
     dir_softdevice + '/s130/headers/nrf51',
     dir_ble_sv + '/ble_bas_c',
     dir_ble_sv + '/ble_hrs_c',
     dir_lib + '/queue',
-    dir_ble + '/ble_dtm',
     dir_toolchain + '/cmsis/include',
     dir_ble_sv + '/ble_rscs_c',
     dir_nrf + '/uart',
@@ -102,7 +142,6 @@ bsp_inc = include_directories(
     dir_ble_sv + '/ble_lls',
     dir_nrf + '/wdt',
     dir_lib + '/bsp',
-    dir_ble + '/ble_db_discovery',
     dir_ble_sv + '/ble_bas',
     dir_lib + '/experimental_section_vars',
     dir_ble_sv + '/ble_ans_c',
@@ -155,12 +194,10 @@ bsp_inc = include_directories(
     dir_ble_sv + '/ble_tps',
     dir_ble_sv + '/ble_dis',
     dir_components + '/device',
-    dir_ble + '/nrf_ble_qwr',
     dir_lib + '/button',
     dir_lib + '/usbd',
     dir_nrf + '/saadc',
     dir_ble_sv + '/ble_lbs_c',
-    dir_ble + '/ble_racp',
     dir_lib + '/fds',
     dir_lib + '/twi',
     dir_nrf + '/clock',
@@ -170,6 +207,7 @@ bsp_inc = include_directories(
     dir_ble_sv + '/ble_hrs',
     dir_lib + '/log/src'
 )
+
 
 segger_rtt = files(
     dir + '/external/segger_rtt/RTT_Syscalls_GCC.c',
@@ -188,18 +226,13 @@ nrf51_gcc_inc = include_directories(
     dir_toolchain + '/gcc'
 )
 
-i = [include_directories('.'), bsp_inc, segger_rtt_inc, nrf51_gcc_inc]
+i = [include_directories('.'), bsp_inc, segger_rtt_inc, nrf51_gcc_inc, include_directories(options_i)]
 
 gcclink = meson.current_source_dir() + '/' + dir_toolchain + '/gcc'
 link_args = ['-Wl,-L' + gcclink, '-L ' + gcclink ]
 
-sensorsim = []
-if get_option('sensorsim')
-  i += include_directories(dir_lib + '/sensorsim')
-  sensorsim = files(dir_lib + '/sensorsim/sensorsim.c')
-endif
-
-l = static_library('sdk', bsp, segger_rtt, nrf51_gcc, sensorsim,
+l = static_library('sdk', bsp, segger_rtt, nrf51_gcc,
+    sources: options_s,
     include_directories: i,
     c_args: [
       '-Wall', '-Werror',
