@@ -30,4 +30,5 @@ Lots of modules are made optional through mesonconf.
 To build your project, a cross-file for PCA10028 boards is added, called `pca10028.cross`, it
 can be used after setting the exe_wrapper to something else (like the `true` program, for example)
 To use it simply start the build with the command
+
     # meson build --cross-file=<path to sdk>/pca10028.cross
