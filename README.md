@@ -1,19 +1,23 @@
 # nrf51-sdk
 Wrapper for Nordic NRF51 SDK, for using meson as a build system.
 
-# How to install
-This SDK needs the Nordic SDK to be installed in `/opt/nrf51-sdk`. If you want to change
+# Prerequisites
+This SDK needs the Nordic SDK 12.2.0 (latest stable to date) to be installed in `/opt/nrf51-sdk`. If you want to change
 the path, simply edit the `nrf51-sdk` link to point to the right direction.
+
+# How to install
+Then from your project, include this directory as a meson subproject, and use the variables
+`c_flags`, `i` and `l` to get the compilation flags (including some args that are ifdef'd in
+the SDK headers), the include dirs, and the static library containing the SDK. For example:
+
 
     project/
         subprojects/
             sdk -> This repo
     meson.build
     main.c
-
-Then from your project, include this directory as a meson subproject, and use the variables
-`c_flags`, `i` and `l` to get the compilation flags (including some args that are ifdef'd in
-the SDK headers), the include dirs, and the static library containing the SDK. For example:
+    
+The meson.build file you would use from the project would look like:
 
     project('app', 'c')
     sdk = subproject('sdk')
