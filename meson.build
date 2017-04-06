@@ -226,7 +226,20 @@ nrf51_gcc_inc = include_directories(
     dir_toolchain + '/gcc'
 )
 
+c_args =  [
+      '-Wall', '-Werror',
+      '-O3', '-g3',
+      '-DNRF_LOG_ENABLED', '-DNRF_LOG_DEFAULT_LEVEL=4',
+      '-DSWI_DISABLE0', '-DBLE_STACK_SUPPORT_REQD',
+      '-DSOFTDEVICE_PRESENT','-DS130','-DNRF_SD_BLE_API_VERSION=2']
+
 i = [include_directories('.'), bsp_inc, segger_rtt_inc, nrf51_gcc_inc, include_directories(options_i)]
+
+if get_option('libble_aio')
+  subdir('lib/ble_automation_io')
+  i += lib_ble_aio_i
+  options_s += lib_ble_aio_s
+endif
 
 gcclink = meson.current_source_dir() + '/' + dir_toolchain + '/gcc'
 link_args = ['-Wl,-L' + gcclink, '-L ' + gcclink ]
@@ -234,12 +247,7 @@ link_args = ['-Wl,-L' + gcclink, '-L ' + gcclink ]
 l = static_library('sdk', bsp, segger_rtt, nrf51_gcc,
     sources: options_s,
     include_directories: i,
-    c_args: [
-      '-Wall', '-Werror',
-      '-O3', '-g3',
-      '-DNRF_LOG_ENABLED', '-DNRF_LOG_DEFAULT_LEVEL=4',
-      '-DSWI_DISABLE0', '-DBLE_STACK_SUPPORT_REQD',
-      '-DSOFTDEVICE_PRESENT','-DS130','-DNRF_SD_BLE_API_VERSION=2'],
+    c_args: c_args,
     link_args: link_args)
 
 cmd_flash_softdevice = ['nrfjprog', '--program', meson.current_source_dir() + '/' + dir_softdevice + '/s130/hex/s130_nrf51_2.0.1_softdevice.hex', '--verify', '-f', 'nrf51', '--sectorerase', '-r']

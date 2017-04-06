@@ -27,3 +27,4 @@ option('ble_tps', type: 'boolean', value: false, description: 'TX Power Service'
 option('nrf_ble_gatt', type: 'boolean', value: false, description: 'Queued writes support module (prepare/execute write)')
 option('nrf_ble_qwr', type: 'boolean', value: false, description: 'Queued writes support module (prepare/execute write)')
 option('sensorsim', type: 'boolean', value: false, description: 'Sensors simulation module')
+option('libble_aio', type: 'boolean', value: false, description: 'COIoT library for BLE Automation IO service')
